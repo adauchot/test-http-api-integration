@@ -18,7 +18,11 @@ lazy val root = (project in file("."))
       // testing
       "org.scalactic" %% "scalactic" % "3.2.18",
       "org.scalatest" %% "scalatest" % "3.2.18" % "test",
-      "org.assertj" % "assertj-core" % "3.25.2" % "test"
+      "org.assertj" % "assertj-core" % "3.25.2" % "test",
+      // Mock server
+      "com.github.tomakehurst" % "wiremock" % "2.27.2" % Test
+
+
     ),
     resolvers += Resolver.url(
       "MAVEN_CENTRAL",
