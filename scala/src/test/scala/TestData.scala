@@ -1,5 +1,3 @@
-package example
-
 object TestData {
   val formId: String = "formId"
   val typeformBaseUrl: String = "http://localhost:5001"
