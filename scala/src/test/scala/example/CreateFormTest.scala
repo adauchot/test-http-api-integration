@@ -29,7 +29,7 @@ class CreateFormTest extends AnyFlatSpec with BeforeAndAfterAll {
   override def afterAll(): Unit = wiremockServer.stop()
 
 
-  "CreateForm" should "return a form id" in {
+  "CreateForm" should "creates a form successfully" in {
     val typeformBaseUrl = TestData.typeformBaseUrl
     val typeformAccessToken = TestData.typeformAccessToken
     val typeformWorkspace = TestData.typeformWorkspace
@@ -54,5 +54,28 @@ class CreateFormTest extends AnyFlatSpec with BeforeAndAfterAll {
     assert(Try(verify(postRequestedFor(urlEqualTo("/forms"))
       .withHeader("Authorization", equalTo(s"Bearer $typeformAccessToken"))
       .withRequestBody(equalToJson(requestBody)))).isSuccess)
+  }
+
+  "CreateForm" should "return an error when the request fails" in {
+    val typeformBaseUrl = TestData.typeformBaseUrl
+    val typeformAccessToken = TestData.typeformAccessToken
+    val typeformWorkspace = TestData.typeformWorkspace
+
+    stubFor(post(urlEqualTo("/forms"))
+      .willReturn(aResponse()
+        .withStatus(401)
+        .withBody("Internal Server Error")
+      )
+    )
+
+    val createForm = CreateForm(
+      typeformBaseUrl,
+      typeformAccessToken,
+      typeformWorkspace,
+      Http()
+    )
+
+    val result = createForm.execute
+    assert(result.isLeft)
   }
 }
